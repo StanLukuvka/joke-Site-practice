@@ -1,4 +1,4 @@
-﻿@model JokeWebApp.Models.Joke
+﻿@model joke_Site_practice.Models.Joke
 
 @{
     ViewData["Title"] = "Details";
@@ -10,17 +10,23 @@
     <h4>Joke</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.JokeQuestion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.JokeQuestion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.JokeAnswer)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.JokeAnswer)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.JokeUserId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.JokeUserId)
         </dd>
     </dl>
 </div>

@@ -4,20 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using JokeWebApp.Models;
+using joke_Site_practice.Models;
 using joke_Site_practice.Data;
 using Microsoft.AspNetCore.Authorization;
+
 
 namespace joke_Site_practice.Controllers
 {
     public class JokesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        protected IAuthorizationService AuthorizationService { get; }
+        protected UserManager<IdentityUser> UserManager { get; }
 
-        public JokesController(ApplicationDbContext context)
+        public JokesController(ApplicationDbContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager) : base()
         {
             _context = context;
+            UserManager = userManager;
+            AuthorizationService = authorizationService;
         }
 
         // GET: Jokes
@@ -58,11 +66,11 @@ namespace joke_Site_practice.Controllers
 
         // GET: Jokes/Create
 
-        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
+        public Joke Joke { get; set; }
 
         // POST: Jokes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -74,6 +82,7 @@ namespace joke_Site_practice.Controllers
         {
             if (ModelState.IsValid)
             {
+                joke.JokeUserId = UserManager.GetUserId(User);
                 _context.Add(joke);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
