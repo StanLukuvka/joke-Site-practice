@@ -10,37 +10,44 @@
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.JokeQuestion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JokeAnswer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JokeUserId)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.JokeQuestion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JokeAnswer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JokeUserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@{int i=0;}
+@foreach (var item in Model)
+{
+
+    <div id="accordion">
+        <div class="card border border-primary">
+            <div class="card-header" id="heading_@i">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse_@i" aria-expanded="false" aria-controls="collapse_@i">
+                        @Html.DisplayFor(modelItem => item.JokeQuestion)
+                    </button>
+                </h5>
+            </div>
+
+            <div id="collapse_@i" class="collapse" aria-labelledby="heading_@i" data-parent="#accordion">
+                <div class="card-body">
+                    <div>
+                        Answer:
+                        @Html.DisplayFor(modelItem => item.JokeAnswer)
+                    </div>
+                    <div>
+                        Username:
+                        @if (item.JokeUserId != null) {
+                        @(Html.DisplayFor(modelItem => item.JokeUserId))
+                        } else {
+                            <text> Null </text>
+                        }
+                    </div>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    i++;
 }
-    </tbody>
 </table>
