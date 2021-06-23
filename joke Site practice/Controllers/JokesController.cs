@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using joke_Site_practice.Models;
 using joke_Site_practice.Data;
+using joke_Site_practice.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
 
@@ -80,14 +81,21 @@ namespace joke_Site_practice.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,JokeQuestion,JokeAnswer")] Joke joke)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                joke.JokeUserId = UserManager.GetUserId(User);
-                _context.Add(joke);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(joke);
             }
-            return View(joke);
+            joke.JokeUserId = UserManager.GetUserId(User);
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, joke, JokeOperations.Create);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+            _context.Add(joke);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            
         }
 
         // GET: Jokes/Edit/5
@@ -97,8 +105,14 @@ namespace joke_Site_practice.Controllers
             {
                 return NotFound();
             }
-
             var joke = await _context.Joke.FindAsync(id);
+
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, joke, JokeOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (joke == null)
             {
                 return NotFound();
@@ -109,11 +123,16 @@ namespace joke_Site_practice.Controllers
         // POST: Jokes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,JokeQuestion,JokeAnswer")] Joke joke)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,JokeQuestion,JokeAnswer,JokeUserId")] Joke joke)
         {
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, joke, JokeOperations.Update);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (id != joke.Id)
             {
                 return NotFound();
@@ -145,6 +164,8 @@ namespace joke_Site_practice.Controllers
         // GET: Jokes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+
+
             if (id == null)
             {
                 return NotFound();
@@ -152,6 +173,12 @@ namespace joke_Site_practice.Controllers
 
             var joke = await _context.Joke
                 .FirstOrDefaultAsync(m => m.Id == id);
+            var isAuthorized = await AuthorizationService.AuthorizeAsync(User, joke, JokeOperations.Delete);
+            if (!isAuthorized.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (joke == null)
             {
                 return NotFound();

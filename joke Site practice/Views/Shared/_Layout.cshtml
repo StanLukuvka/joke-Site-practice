@@ -39,12 +39,18 @@
             </div>
         </nav>
 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div>
-                <form class="form-inline"  asp-controller="Jokes" asp-action="ShowSearchResults">
-                    <input name="SearchPhrase" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3">
+            <div class="container">
+
+                <form class="form-inline" asp-controller="Jokes" asp-action="ShowSearchResults">
+                    <div class="input-group mb-3">
+                        <input name="SearchPhrase" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        </div>
+                    </div>
                 </form>
+
             </div>
 
         </nav>

@@ -1,3 +1,6 @@
 ﻿@using joke_Site_practice
 @using joke_Site_practice.Models
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using joke_Site_practice.Authorization;
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
