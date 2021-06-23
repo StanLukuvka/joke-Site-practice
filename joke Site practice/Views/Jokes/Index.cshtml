@@ -4,11 +4,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<link rel="stylesheet" href="~/css/Jokes_Index.css" />
 
+<div class="Jokes_Index-Title">
+    <h1>Index</h1>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+</div>
+
 <table class="table">
 @{int i=0;}
 @foreach (var item in Model)
