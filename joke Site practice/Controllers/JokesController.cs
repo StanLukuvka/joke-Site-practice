@@ -86,6 +86,7 @@ namespace joke_Site_practice.Controllers
                 return View(joke);
             }
             joke.JokeUserId = UserManager.GetUserId(User);
+            joke.JokeEmail = UserManager.GetUserName(User);
 
             var isAuthorized = await AuthorizationService.AuthorizeAsync(User, joke, JokeOperations.Create);
             if (!isAuthorized.Succeeded)

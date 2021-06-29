@@ -25,12 +25,5 @@ namespace joke_Site_practice.Controllers
         {
             return View();
         }
-
-        [AllowAnonymous]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
     }
 }

@@ -35,7 +35,14 @@ namespace joke_Site_practice
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-                
+
+            services.Configure<IdentityOptions>(options =>
+            {
+
+                options.User.RequireUniqueEmail = false;
+                options.SignIn.RequireConfirmedEmail = false;
+            });
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();
